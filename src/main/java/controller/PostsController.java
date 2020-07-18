@@ -15,8 +15,8 @@ import service.implementation.DeviceBoundServiceImpl;
 import service.implementation.PostServiceImpl;
 import service.implementation.UserServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/content/post")
@@ -52,11 +52,8 @@ public class PostsController {
 
     @GetMapping("/")
     public ResponseEntity<List<PostResponse>> getPostsPage(@RequestParam int page) {
-        List<Post> posts = postService.getPostsPage(page);
-        List<PostResponse> responses = new ArrayList<>();
-        for (Post post : posts) {
-            responses.add(postModelToResponseConverter.convert(post));
-        }
+        List<PostResponse> responses = postService.getPostsPage(page).stream()
+                .map(postModelToResponseConverter::convert).collect(Collectors.toList());
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }

@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.interfaces.PostService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -32,14 +32,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getPostsPage(int page) {
         List<PostEntity> entities = postRepository.findPostEntitiesByIdBetweenOrderByDateCreatedDesc(1 + 30 * (page - 1), 1 + 30 * page);
-        List<Post> list = new ArrayList<>();
-        for (PostEntity entity : entities) {
+        return entities.stream().map(entity-> {
             Post post = postEntityToModelConverter.convert(entity);
             post.setUser(userEntityToModelConverter.convert(
                     userRepository.findUserEntityById(entity.getCreatorId())));
-            list.add(post);
-        }
-        return list;
+            return post;
+        }).collect(Collectors.toList());
     }
 
     @Override
