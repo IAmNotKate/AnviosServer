@@ -12,7 +12,6 @@ public class UserEntityToModelConverter implements Converter<UserEntity, User> {
         User user = new User();
         user.setPassword(userEntity.getPassword());
         user.setUsername(userEntity.getUsername());
-        user.setPassword(userEntity.getPassword());
         user.setName(userEntity.getName());
         user.setSurname(userEntity.getSurname());
         user.setEmail(userEntity.getEmail());
